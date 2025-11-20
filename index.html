@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FFA500">
+    <meta name="description" content="Sistema de comandas para Chopp Truck">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Chopp Truck App</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Tela de Listagem de Comandas -->
+    <div id="screen-comandas" class="screen active">
+        <header class="app-header">
+            <h1>🍺 Chopp Truck</h1>
+            <button id="btn-produtos" class="btn-icon" title="Gerenciar Produtos">⚙️</button>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" id="search-comandas" placeholder="🔍 Buscar cliente...">
+        </div>
+
+        <div class="comandas-stats">
+            <div class="stat-card">
+                <span class="stat-label">Abertas</span>
+                <span id="stat-abertas" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Total de Hoje</span>
+                <span id="stat-total" class="stat-value">R$ 0,00</span>
+            </div>
+        </div>
+
+        <div class="tab-buttons">
+            <button id="tab-abertas" class="tab-btn active">Abertas</button>
+            <button id="tab-fechadas" class="tab-btn">Fechadas</button>
+        </div>
+
+        <div id="comandas-list" class="comandas-list"></div>
+
+        <button id="btn-nova-comanda" class="btn-fab">+</button>
+    </div>
+
+    <!-- Tela de Nova Comanda (Modal) -->
+    <div id="modal-nova-comanda" class="modal">
+        <div class="modal-content">
+            <h2>Nova Comanda</h2>
+            <input type="text" id="input-cliente" placeholder="Nome do Cliente" autofocus>
+            <input type="text" id="input-mesa" placeholder="Mesa/Pager (opcional)">
+            <div class="modal-buttons">
+                <button id="btn-cancelar-comanda" class="btn-secondary">Cancelar</button>
+                <button id="btn-criar-comanda" class="btn-primary">Criar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de Operação de Venda (Dentro da Comanda) -->
+    <div id="screen-venda" class="screen">
+        <header class="app-header">
+            <button id="btn-voltar-venda" class="btn-icon">←</button>
+            <div class="header-info">
+                <h2 id="venda-cliente-nome"></h2>
+                <span id="venda-mesa-info" class="mesa-tag"></span>
+            </div>
+        </header>
+
+        <div class="total-banner">
+            <span class="total-label">Total:</span>
+            <span id="venda-total" class="total-value">R$ 0,00</span>
+        </div>
+
+        <div id="produtos-grid" class="produtos-grid"></div>
+
+        <div class="resumo-pedido">
+            <h3>Resumo do Pedido</h3>
+            <div id="resumo-itens" class="resumo-itens"></div>
+        </div>
+
+        <button id="btn-fechar-comanda" class="btn-checkout">Fechar Comanda</button>
+    </div>
+
+    <!-- Tela de Conferência e Fechamento -->
+    <div id="screen-fechamento" class="screen">
+        <header class="app-header">
+            <button id="btn-voltar-fechamento" class="btn-icon">←</button>
+            <h2>Fechar Comanda</h2>
+        </header>
+
+        <div class="conferencia-info">
+            <h3 id="fechamento-cliente"></h3>
+            <span id="fechamento-mesa" class="mesa-tag"></span>
+        </div>
+
+        <div class="conferencia-lista">
+            <h4>Itens Consumidos:</h4>
+            <div id="conferencia-itens"></div>
+        </div>
+
+        <div class="total-final">
+            <span>Total a Pagar:</span>
+            <span id="fechamento-total" class="total-final-value">R$ 0,00</span>
+        </div>
+
+        <div class="pagamento-opcoes">
+            <h4>Forma de Pagamento:</h4>
+            <div class="pagamento-buttons">
+                <button class="btn-pagamento" data-metodo="pix">
+                    <span class="pagamento-icon">📱</span>
+                    <span>Pix</span>
+                </button>
+                <button class="btn-pagamento" data-metodo="dinheiro">
+                    <span class="pagamento-icon">💵</span>
+                    <span>Dinheiro</span>
+                </button>
+                <button class="btn-pagamento" data-metodo="cartao">
+                    <span class="pagamento-icon">💳</span>
+                    <span>Cartão</span>
+                </button>
+            </div>
+        </div>
+
+        <button id="btn-confirmar-pagamento" class="btn-confirmar-pagamento" disabled>
+            Confirmar Pagamento
+        </button>
+    </div>
+
+    <!-- Tela de Gestão de Produtos -->
+    <div id="screen-produtos" class="screen">
+        <header class="app-header">
+            <button id="btn-voltar-produtos" class="btn-icon">←</button>
+            <h2>Produtos</h2>
+            <button id="btn-add-produto" class="btn-icon">+</button>
+        </header>
+
+        <div id="produtos-list" class="produtos-list"></div>
+    </div>
+
+    <!-- Modal de Produto (Criar/Editar) -->
+    <div id="modal-produto" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-produto-titulo">Novo Produto</h2>
+            <input type="hidden" id="edit-produto-id">
+            <input type="text" id="input-produto-nome" placeholder="Nome do Produto">
+            <input type="number" id="input-produto-preco" placeholder="Preço" step="0.01" min="0">
+
+            <label>Cor do Card:</label>
+            <div class="color-picker">
+                <button class="color-option" data-color="#FF6B6B" style="background: #FF6B6B;"></button>
+                <button class="color-option" data-color="#4ECDC4" style="background: #4ECDC4;"></button>
+                <button class="color-option" data-color="#45B7D1" style="background: #45B7D1;"></button>
+                <button class="color-option" data-color="#FFA500" style="background: #FFA500;"></button>
+                <button class="color-option" data-color="#96CEB4" style="background: #96CEB4;"></button>
+                <button class="color-option" data-color="#FFEAA7" style="background: #FFEAA7;"></button>
+                <button class="color-option" data-color="#DFE6E9" style="background: #DFE6E9;"></button>
+                <button class="color-option active" data-color="#74B9FF" style="background: #74B9FF;"></button>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="btn-cancelar-produto" class="btn-secondary">Cancelar</button>
+                <button id="btn-salvar-produto" class="btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast para notificações -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
