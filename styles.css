@@ -104,10 +104,12 @@ body {
 .search-bar {
     padding: 1rem;
     background: white;
+    display: flex;
+    gap: 0.5rem;
 }
 
 .search-bar input {
-    width: 100%;
+    flex: 1;
     padding: 0.75rem 1rem;
     border: 2px solid var(--light);
     border-radius: 12px;
@@ -116,6 +118,24 @@ body {
 }
 
 .search-bar input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+}
+
+.sort-select {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--light);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    background: white;
+    color: var(--dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 160px;
+}
+
+.sort-select:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
@@ -197,6 +217,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-left: 4px solid transparent;
+}
+
+.comanda-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-left-color: var(--primary-color);
 }
 
 .comanda-card:active {
@@ -256,12 +283,17 @@ body {
     font-size: 2rem;
     box-shadow: var(--shadow-lg);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     z-index: 99;
 }
 
+.btn-fab:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
+}
+
 .btn-fab:active {
-    transform: scale(0.9);
+    transform: scale(0.9) rotate(90deg);
 }
 
 /* Modal */
@@ -345,11 +377,37 @@ body {
 .btn-primary {
     background: var(--primary-color);
     color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-primary:active::before {
+    width: 300px;
+    height: 300px;
 }
 
 .btn-primary:active {
     background: var(--primary-dark);
     transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+    background: var(--gray);
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .btn-secondary {
@@ -394,6 +452,19 @@ body {
 .produto-card:active {
     transform: scale(0.95);
     box-shadow: var(--shadow-lg);
+    animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .produto-nome {
@@ -412,12 +483,26 @@ body {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 0.25rem 0.5rem;
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    animation: badgePop 0.3s ease;
+}
+
+@keyframes badgePop {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* Total Banner */
@@ -497,21 +582,32 @@ body {
     height: 36px;
     border-radius: 50%;
     border: none;
-    background: var(--danger-color);
     color: white;
     font-size: 1.25rem;
     cursor: pointer;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-quantidade:active {
     transform: scale(0.9);
 }
 
+.btn-menos {
+    background: var(--danger-color);
+}
+
+.btn-mais {
+    background: var(--success-color);
+}
+
 .item-quantidade {
     font-weight: bold;
     min-width: 30px;
     text-align: center;
+    font-size: 1.1rem;
 }
 
 /* Botão de Checkout */
@@ -529,11 +625,23 @@ body {
     font-weight: bold;
     cursor: pointer;
     box-shadow: var(--shadow-lg);
-    transition: all 0.2s;
+    transition: all 0.3s ease;
+}
+
+.btn-checkout:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.3);
 }
 
 .btn-checkout:active {
     transform: scale(0.98);
+}
+
+.btn-checkout:disabled {
+    background: var(--gray);
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: var(--shadow);
 }
 
 /* Tela de Fechamento */
@@ -751,15 +859,29 @@ body {
     background: var(--dark);
     color: white;
     padding: 1rem 1.5rem;
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: var(--shadow-lg);
-    transition: bottom 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     z-index: 2000;
     max-width: 90%;
+    opacity: 0;
 }
 
 .toast.show {
     bottom: 2rem;
+    opacity: 1;
+    animation: toastSlide 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes toastSlide {
+    0% {
+        bottom: -100px;
+        opacity: 0;
+    }
+    100% {
+        bottom: 2rem;
+        opacity: 1;
+    }
 }
 
 /* Loading */
