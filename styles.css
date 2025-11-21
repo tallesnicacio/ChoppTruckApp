@@ -148,18 +148,22 @@ body {
 /* Search Bar */
 .search-bar {
     padding: 1rem;
-    background: white;
+    background: var(--bg-primary);
     display: flex;
     gap: 0.5rem;
+    transition: all 0.3s ease;
 }
 
 .search-bar input {
     flex: 1;
     padding: 0.75rem 1rem;
-    border: 2px solid var(--light);
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.2s;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 44px; /* Touch target mínimo */
 }
 
 .search-bar input:focus {
@@ -170,14 +174,15 @@ body {
 
 .sort-select {
     padding: 0.75rem 1rem;
-    border: 2px solid var(--light);
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     font-size: 0.9rem;
-    background: white;
-    color: var(--dark);
+    background: var(--bg-primary);
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.2s;
     min-width: 160px;
+    min-height: 44px; /* Touch target mínimo */
 }
 
 .sort-select:focus {
@@ -454,9 +459,13 @@ body {
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 1rem;
-    border: 2px solid var(--light);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 44px; /* Touch target mínimo */
+    transition: all 0.2s;
 }
 
 .modal-content input:focus {
@@ -679,16 +688,17 @@ body {
 
 /* Resumo do Pedido */
 .resumo-pedido {
-    background: white;
+    background: var(--bg-primary);
     margin: 1rem;
     padding: 1rem;
     border-radius: 12px;
     box-shadow: var(--shadow);
+    transition: all 0.3s ease;
 }
 
 .resumo-pedido h3 {
     margin-bottom: 1rem;
-    color: var(--dark);
+    color: var(--text-primary);
 }
 
 .resumo-itens {
@@ -795,9 +805,10 @@ body {
 
 /* Tela de Fechamento */
 .conferencia-info {
-    background: white;
+    background: var(--bg-primary);
     padding: 1.5rem;
     text-align: center;
+    transition: all 0.3s ease;
 }
 
 .conferencia-info h3 {
@@ -806,23 +817,24 @@ body {
 }
 
 .conferencia-lista {
-    background: white;
+    background: var(--bg-primary);
     margin: 1rem;
     padding: 1rem;
     border-radius: 12px;
     box-shadow: var(--shadow);
+    transition: all 0.3s ease;
 }
 
 .conferencia-lista h4 {
     margin-bottom: 1rem;
-    color: var(--dark);
+    color: var(--text-primary);
 }
 
 .conferencia-item {
     display: flex;
     justify-content: space-between;
     padding: 0.75rem;
-    border-bottom: 1px solid var(--light);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .conferencia-item:last-child {
@@ -848,16 +860,17 @@ body {
 
 /* Opções de Pagamento */
 .pagamento-opcoes {
-    background: white;
+    background: var(--bg-primary);
     margin: 1rem;
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: var(--shadow);
+    transition: all 0.3s ease;
 }
 
 .pagamento-opcoes h4 {
     margin-bottom: 1rem;
-    color: var(--dark);
+    color: var(--text-primary);
 }
 
 .pagamento-buttons {
@@ -868,15 +881,17 @@ body {
 
 .btn-pagamento {
     padding: 1rem;
-    border: 2px solid var(--light);
+    border: 2px solid var(--border-color);
     border-radius: 12px;
-    background: white;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    min-height: 44px; /* Touch target mínimo */
 }
 
 .btn-pagamento:active {
@@ -1197,13 +1212,399 @@ body {
     transform: scale(0.9);
 }
 
-/* Responsive */
-@media (min-width: 768px) {
-    .produtos-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+/* ===== RESPONSIVIDADE ===== */
+
+/* Mobile Pequeno (até 480px) */
+@media (max-width: 480px) {
+    /* Header compacto */
+    .app-header h1,
+    .app-header h2 {
+        font-size: 1.2rem;
     }
 
+    /* Search bar vertical em telas muito pequenas */
+    .search-bar {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .sort-select {
+        width: 100%;
+        min-width: auto;
+    }
+
+    /* Stats cards menores */
+    .stat-value {
+        font-size: 1.3rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+    }
+
+    /* Grid de produtos 2 colunas */
+    .produtos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    /* Produtos com fonte menor */
+    .produto-nome {
+        font-size: 0.9rem;
+    }
+
+    .produto-preco {
+        font-size: 1.1rem;
+    }
+
+    /* FAB menor */
+    .btn-fab {
+        width: 56px;
+        height: 56px;
+        font-size: 1.75rem;
+        bottom: 1.5rem;
+        right: 1.5rem;
+    }
+
+    /* Theme toggle menor */
+    .theme-toggle {
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+        bottom: 5.5rem;
+        right: 1.5rem;
+    }
+
+    /* Comandas cards compactos */
+    .comanda-card {
+        padding: 1rem;
+    }
+
+    .comanda-info h3 {
+        font-size: 1rem;
+    }
+
+    .comanda-valor .valor {
+        font-size: 1.1rem;
+    }
+
+    /* Modal menor */
+    .modal-content {
+        padding: 1.25rem;
+    }
+
+    .modal-content h2 {
+        font-size: 1.3rem;
+    }
+
+    /* Empty state menor */
+    .empty-state-icon {
+        font-size: 4rem;
+    }
+
+    .empty-state-text {
+        font-size: 1rem;
+    }
+}
+
+/* Mobile Grande / Phablet (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+    /* Grid 3 colunas */
+    .produtos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Search bar horizontal */
+    .search-bar {
+        flex-direction: row;
+    }
+
+    .sort-select {
+        min-width: 140px;
+    }
+}
+
+/* Tablet (768px - 1024px) */
+@media (min-width: 768px) {
+    /* Container com largura máxima */
+    .screen {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Header mais espaçoso */
+    .app-header {
+        padding: 1.25rem 2rem;
+    }
+
+    .app-header h1,
+    .app-header h2 {
+        font-size: 1.75rem;
+    }
+
+    /* Search bar com mais espaço */
+    .search-bar {
+        padding: 1.25rem 2rem;
+    }
+
+    /* Stats em linha única */
+    .comandas-stats {
+        padding: 1.25rem 2rem;
+        gap: 1.5rem;
+    }
+
+    .stat-card {
+        padding: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+    }
+
+    /* Grid 4 colunas */
+    .produtos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        padding: 1.5rem 2rem;
+        gap: 1.25rem;
+    }
+
+    /* Comandas list com padding */
+    .comandas-list {
+        padding: 1.25rem 2rem;
+    }
+
+    /* Modal maior */
     .modal-content {
         max-width: 500px;
+        padding: 2rem;
+    }
+
+    /* FAB e Theme toggle maiores */
+    .btn-fab {
+        width: 70px;
+        height: 70px;
+        font-size: 2.25rem;
+        bottom: 2.5rem;
+        right: 2.5rem;
+    }
+
+    .theme-toggle {
+        width: 56px;
+        height: 56px;
+        font-size: 1.6rem;
+        bottom: 7rem;
+        right: 2.5rem;
+    }
+
+    /* Total banner mais destacado */
+    .total-banner {
+        margin: 0 2rem;
+        padding: 2rem;
+    }
+
+    .total-value {
+        font-size: 2.5rem;
+    }
+
+    /* Resumo pedido */
+    .resumo-pedido {
+        margin: 1.5rem 2rem;
+        padding: 1.5rem;
+    }
+
+    /* Botão checkout */
+    .btn-checkout {
+        left: 2rem;
+        right: 2rem;
+        font-size: 1.2rem;
+    }
+
+    /* Conferência */
+    .conferencia-lista {
+        margin: 1.5rem 2rem;
+    }
+
+    .total-final {
+        margin: 1.5rem 2rem;
+    }
+
+    .pagamento-opcoes {
+        margin: 1.5rem 2rem;
+    }
+
+    /* Produtos list */
+    .produtos-list {
+        padding: 1.5rem 2rem;
+    }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+    /* Container ainda mais amplo */
+    .screen {
+        max-width: 1400px;
+    }
+
+    /* Header desktop */
+    .app-header {
+        padding: 1.5rem 3rem;
+    }
+
+    /* Stats cards em 4 colunas */
+    .comandas-stats {
+        grid-template-columns: repeat(4, 1fr);
+        padding: 1.5rem 3rem;
+        gap: 2rem;
+    }
+
+    /* Grid 5-6 colunas */
+    .produtos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        padding: 2rem 3rem;
+        gap: 1.5rem;
+    }
+
+    /* Search bar desktop */
+    .search-bar {
+        padding: 1.5rem 3rem;
+    }
+
+    /* Comandas em 2 colunas */
+    .comandas-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 1.5rem 3rem;
+        gap: 1.25rem;
+    }
+
+    /* Modal ainda maior */
+    .modal-content {
+        max-width: 600px;
+        padding: 2.5rem;
+    }
+
+    /* FAB desktop */
+    .btn-fab {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+        bottom: 3rem;
+        right: 3rem;
+    }
+
+    .theme-toggle {
+        width: 64px;
+        height: 64px;
+        font-size: 1.8rem;
+        bottom: 8rem;
+        right: 3rem;
+    }
+
+    /* Tela de venda em 2 colunas */
+    .resumo-pedido {
+        margin: 2rem 3rem;
+    }
+
+    /* Botões de pagamento maiores */
+    .pagamento-buttons {
+        gap: 1.5rem;
+    }
+
+    .btn-pagamento {
+        padding: 1.5rem;
+    }
+
+    .pagamento-icon {
+        font-size: 2.5rem;
+    }
+}
+
+/* Desktop XL (1441px+) */
+@media (min-width: 1441px) {
+    /* Layout em grid para aproveitamento total */
+    .produtos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    /* Comandas em 3 colunas */
+    .comandas-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+
+    /* Stats em linha única expandida */
+    .comandas-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2.5rem;
+    }
+
+    .stat-card {
+        padding: 2rem;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+    }
+}
+
+/* Landscape Mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+    /* Ajustes para telas deitadas */
+    .app-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .app-header h1,
+    .app-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .comandas-stats {
+        padding: 0.75rem 1rem;
+    }
+
+    .stat-card {
+        padding: 0.75rem;
+    }
+
+    .btn-fab {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        bottom: 1rem;
+        right: 1rem;
+    }
+
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        bottom: 4.5rem;
+        right: 1rem;
+    }
+
+    /* Modal ocupa menos altura */
+    .modal-content {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* Print styles */
+@media print {
+    .btn-fab,
+    .theme-toggle,
+    .btn-icon,
+    .app-header button {
+        display: none !important;
+    }
+
+    .screen {
+        padding-bottom: 0;
+    }
+
+    .comanda-card,
+    .produto-card {
+        break-inside: avoid;
     }
 }
