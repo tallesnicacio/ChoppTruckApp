@@ -7,12 +7,16 @@ let selectedPagamento = null;
 let wakeLock = null;
 let selectedColor = '#74B9FF'; // Cor padrão para novos produtos
 let sortBy = 'data'; // Critério de ordenação: 'data' ou 'nome'
+let currentTheme = localStorage.getItem('theme') || 'light'; // Tema atual
 
 // ===== INICIALIZAÇÃO =====
 document.addEventListener('DOMContentLoaded', async () => {
     showLoading();
 
     try {
+        // Aplica tema salvo
+        applyTheme(currentTheme);
+
         // Inicializa o banco de dados
         await db.init();
         await db.seedProdutos();
@@ -115,6 +119,9 @@ function setupEventListeners() {
     document.querySelectorAll('.color-option').forEach(btn => {
         btn.addEventListener('click', () => selectColor(btn.dataset.color));
     });
+
+    // Theme Toggle
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 }
 
 // ===== TELA: LISTAGEM DE COMANDAS =====
@@ -507,14 +514,19 @@ async function confirmarPagamento() {
     try {
         await db.fecharComanda(currentComanda.id, selectedPagamento);
 
+        // Celebração com confetti!
+        createConfetti();
         vibrate([50, 100, 50]);
-        showToast('Comanda fechada com sucesso!');
+        showToast('🎉 Comanda fechada com sucesso!');
 
         await releaseWakeLock();
         currentComanda = null;
         selectedPagamento = null;
 
-        loadComandasScreen();
+        // Pequeno delay para apreciar o confetti
+        setTimeout(() => {
+            loadComandasScreen();
+        }, 300);
     } catch (error) {
         console.error('Erro ao fechar comanda:', error);
         showToast('Erro ao fechar comanda');
@@ -726,4 +738,71 @@ function showLoading() {
 
 function hideLoading() {
     document.getElementById('loading').classList.remove('active');
+}
+
+// ===== TEMA ESCURO =====
+function toggleTheme() {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(currentTheme);
+    localStorage.setItem('theme', currentTheme);
+    vibrate(30);
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const icon = document.getElementById('theme-icon');
+    if (icon) {
+        icon.textContent = theme === 'light' ? '🌙' : '☀️';
+    }
+}
+
+// ===== SKELETON LOADING =====
+function showSkeletonLoading(containerId, type = 'card', count = 3) {
+    const container = document.getElementById(containerId);
+    const skeletons = [];
+
+    for (let i = 0; i < count; i++) {
+        skeletons.push(`<div class="skeleton skeleton-${type}"></div>`);
+    }
+
+    container.innerHTML = skeletons.join('');
+}
+
+// ===== CONFETTI ANIMATION =====
+function createConfetti() {
+    const colors = ['#FFA500', '#FF6B6B', '#4ECDC4', '#2ECC71', '#FFB733'];
+    const confettiCount = 50;
+
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 3000);
+    }
+}
+
+// ===== CONTADOR ANIMADO =====
+function animateNumber(element, start, end, duration = 500) {
+    const range = end - start;
+    const startTime = performance.now();
+
+    function updateNumber(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        const current = Math.floor(start + range * progress);
+        element.textContent = current;
+
+        if (progress < 1) {
+            requestAnimationFrame(updateNumber);
+        }
+    }
+
+    requestAnimationFrame(updateNumber);
 }
