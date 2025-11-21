@@ -51,11 +51,8 @@ class Database {
 
         if (produtos.length === 0) {
             const produtosIniciais = [
-                { nome: 'Chopp Pilsen', preco: 12.00, cor: '#FF6B6B' },
-                { nome: 'Chopp IPA', preco: 15.00, cor: '#FFA500' },
-                { nome: 'Água Mineral', preco: 3.00, cor: '#45B7D1' },
-                { nome: 'Refrigerante', preco: 5.00, cor: '#4ECDC4' },
-                { nome: 'Suco Natural', preco: 8.00, cor: '#96CEB4' }
+                { nome: 'Chopp Pilsen', preco: 14.00, cor: '#FF6B6B' },
+                { nome: 'Chopp IPA', preco: 17.00, cor: '#FFA500' }
             ];
 
             for (const produto of produtosIniciais) {
