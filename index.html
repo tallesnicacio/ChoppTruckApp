@@ -153,9 +153,30 @@
     <div id="screen-produtos" class="screen">
         <header class="app-header">
             <button id="btn-voltar-produtos" class="btn-icon">←</button>
-            <h2>Produtos</h2>
+            <h2>Configurações</h2>
             <button id="btn-add-produto" class="btn-icon">+</button>
         </header>
+
+        <!-- Seção de Configurações -->
+        <div class="config-section">
+            <h3>Aparência</h3>
+            <div class="config-item">
+                <div class="config-info">
+                    <span class="config-label">Modo Escuro</span>
+                    <span class="config-description">Ativar tema escuro para reduzir o brilho da tela</span>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="config-section">
+            <h3>Produtos</h3>
+        </div>
 
         <div id="produtos-list" class="produtos-list"></div>
     </div>
@@ -194,11 +215,6 @@
     <div id="loading" class="loading-overlay">
         <div class="spinner"></div>
     </div>
-
-    <!-- Theme Toggle Button -->
-    <button id="theme-toggle" class="theme-toggle" title="Alternar tema">
-        <span id="theme-icon">🌙</span>
-    </button>
 
     <script src="db.js"></script>
     <script src="app.js"></script>

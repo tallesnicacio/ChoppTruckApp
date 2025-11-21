@@ -121,7 +121,7 @@ function setupEventListeners() {
     });
 
     // Theme Toggle
-    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    document.getElementById('theme-toggle').addEventListener('change', toggleTheme);
 }
 
 // ===== TELA: LISTAGEM DE COMANDAS =====
@@ -538,6 +538,13 @@ async function confirmarPagamento() {
 // ===== TELA: GESTÃO DE PRODUTOS =====
 async function loadProdutosScreen() {
     showScreen('screen-produtos');
+
+    // Atualiza o estado do toggle de tema
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.checked = currentTheme === 'dark';
+    }
+
     await renderProdutosList();
 }
 
@@ -741,8 +748,8 @@ function hideLoading() {
 }
 
 // ===== TEMA ESCURO =====
-function toggleTheme() {
-    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+function toggleTheme(event) {
+    currentTheme = event.target.checked ? 'dark' : 'light';
     applyTheme(currentTheme);
     localStorage.setItem('theme', currentTheme);
     vibrate(30);
@@ -750,10 +757,6 @@ function toggleTheme() {
 
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    const icon = document.getElementById('theme-icon');
-    if (icon) {
-        icon.textContent = theme === 'light' ? '🌙' : '☀️';
-    }
 }
 
 // ===== SKELETON LOADING =====

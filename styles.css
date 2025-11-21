@@ -40,22 +40,22 @@
     --secondary-color: #64DFDF;
     --success-color: #51D88A;
     --danger-color: #FF6B6B;
-    --dark: #E8E8E8;
+    --dark: #F5F5F5;
     --light: #2C3E50;
-    --gray: #B0B0B0;
+    --gray: #C0C0C0;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
     --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.5);
 
-    --bg-primary: #1a1a2e;
-    --bg-secondary: #16213e;
-    --bg-gradient: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-    --text-primary: #E8E8E8;
-    --text-secondary: #B0B0B0;
-    --border-color: #2C3E50;
+    --bg-primary: #1e1e2e;
+    --bg-secondary: #181825;
+    --bg-gradient: linear-gradient(135deg, #11111b 0%, #1e1e2e 100%);
+    --text-primary: #F5F5F5;
+    --text-secondary: #C0C0C0;
+    --border-color: #313244;
 
-    --glass-bg: rgba(26, 26, 46, 0.9);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(30, 30, 46, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.12);
 }
 
 body {
@@ -1181,35 +1181,113 @@ body {
     }
 }
 
-/* Theme Toggle Button */
-.theme-toggle {
-    position: fixed;
-    bottom: 6rem;
-    right: 2rem;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    border: 2px solid var(--glass-border);
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: var(--shadow-lg);
+/* Seção de Configurações */
+.config-section {
+    background: var(--bg-primary);
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
     transition: all 0.3s ease;
-    z-index: 98;
+}
+
+.config-section h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+}
+
+.config-item {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    gap: 1rem;
 }
 
-.theme-toggle:hover {
-    transform: scale(1.1) rotate(20deg);
-    box-shadow: var(--shadow-xl);
+.config-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
-.theme-toggle:active {
-    transform: scale(0.9);
+.config-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.config-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.section-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0 1rem;
+}
+
+/* Toggle Switch Moderno */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 30px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(22px);
+}
+
+.toggle-switch input:focus + .toggle-slider {
+    box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
+}
+
+/* Animação ao clicar */
+.toggle-switch:active .toggle-slider:before {
+    width: 28px;
 }
 
 /* ===== RESPONSIVIDADE ===== */
@@ -1263,15 +1341,6 @@ body {
         height: 56px;
         font-size: 1.75rem;
         bottom: 1.5rem;
-        right: 1.5rem;
-    }
-
-    /* Theme toggle menor */
-    .theme-toggle {
-        width: 44px;
-        height: 44px;
-        font-size: 1.3rem;
-        bottom: 5.5rem;
         right: 1.5rem;
     }
 
@@ -1379,20 +1448,12 @@ body {
         padding: 2rem;
     }
 
-    /* FAB e Theme toggle maiores */
+    /* FAB maior */
     .btn-fab {
         width: 70px;
         height: 70px;
         font-size: 2.25rem;
         bottom: 2.5rem;
-        right: 2.5rem;
-    }
-
-    .theme-toggle {
-        width: 56px;
-        height: 56px;
-        font-size: 1.6rem;
-        bottom: 7rem;
         right: 2.5rem;
     }
 
@@ -1492,14 +1553,6 @@ body {
         right: 3rem;
     }
 
-    .theme-toggle {
-        width: 64px;
-        height: 64px;
-        font-size: 1.8rem;
-        bottom: 8rem;
-        right: 3rem;
-    }
-
     /* Tela de venda em 2 colunas */
     .resumo-pedido {
         margin: 2rem 3rem;
@@ -1575,14 +1628,6 @@ body {
         right: 1rem;
     }
 
-    .theme-toggle {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-        bottom: 4.5rem;
-        right: 1rem;
-    }
-
     /* Modal ocupa menos altura */
     .modal-content {
         max-height: 90vh;
@@ -1593,7 +1638,6 @@ body {
 /* Print styles */
 @media print {
     .btn-fab,
-    .theme-toggle,
     .btn-icon,
     .app-header button {
         display: none !important;
