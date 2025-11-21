@@ -25,6 +25,10 @@
 
         <div class="search-bar">
             <input type="text" id="search-comandas" placeholder="🔍 Buscar cliente...">
+            <select id="sort-comandas" class="sort-select">
+                <option value="data">Ordenar por Data</option>
+                <option value="nome">Ordenar por Nome</option>
+            </select>
         </div>
 
         <div class="comandas-stats">
@@ -61,6 +65,19 @@
         </div>
     </div>
 
+    <!-- Modal de Editar Comanda -->
+    <div id="modal-editar-comanda" class="modal">
+        <div class="modal-content">
+            <h2>Editar Comanda</h2>
+            <input type="text" id="edit-input-cliente" placeholder="Nome do Cliente" autofocus>
+            <input type="text" id="edit-input-mesa" placeholder="Mesa/Pager (opcional)">
+            <div class="modal-buttons">
+                <button id="btn-cancelar-edicao" class="btn-secondary">Cancelar</button>
+                <button id="btn-salvar-edicao" class="btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Tela de Operação de Venda (Dentro da Comanda) -->
     <div id="screen-venda" class="screen">
         <header class="app-header">
@@ -69,6 +86,7 @@
                 <h2 id="venda-cliente-nome"></h2>
                 <span id="venda-mesa-info" class="mesa-tag"></span>
             </div>
+            <button id="btn-editar-comanda" class="btn-icon" title="Editar Comanda">✏️</button>
         </header>
 
         <div class="total-banner">

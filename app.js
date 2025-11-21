@@ -6,6 +6,7 @@ let currentTab = 'abertas';
 let selectedPagamento = null;
 let wakeLock = null;
 let selectedColor = '#74B9FF'; // Cor padrão para novos produtos
+let sortBy = 'data'; // Critério de ordenação: 'data' ou 'nome'
 
 // ===== INICIALIZAÇÃO =====
 document.addEventListener('DOMContentLoaded', async () => {
@@ -60,6 +61,7 @@ function setupEventListeners() {
     document.getElementById('tab-abertas').addEventListener('click', () => switchTab('abertas'));
     document.getElementById('tab-fechadas').addEventListener('click', () => switchTab('fechadas'));
     document.getElementById('search-comandas').addEventListener('input', handleSearchComandas);
+    document.getElementById('sort-comandas').addEventListener('change', handleSortChange);
 
     // Modal Nova Comanda
     document.getElementById('btn-criar-comanda').addEventListener('click', criarComanda);
@@ -79,6 +81,13 @@ function setupEventListeners() {
         loadComandasScreen();
     });
     document.getElementById('btn-fechar-comanda').addEventListener('click', openFechamentoScreen);
+    document.getElementById('btn-editar-comanda').addEventListener('click', openEditarComandaModal);
+
+    // Modal Editar Comanda
+    document.getElementById('btn-salvar-edicao').addEventListener('click', salvarEdicaoComanda);
+    document.getElementById('btn-cancelar-edicao').addEventListener('click', () => {
+        hideModal('modal-editar-comanda');
+    });
 
     // Tela de Fechamento
     document.getElementById('btn-voltar-fechamento').addEventListener('click', () => {
@@ -116,7 +125,16 @@ async function loadComandasScreen() {
 }
 
 async function renderComandas() {
-    const comandas = await db.getComandasByStatus(currentTab === 'abertas' ? 'aberta' : 'paga');
+    let comandas = await db.getComandasByStatus(currentTab === 'abertas' ? 'aberta' : 'paga');
+
+    // Aplica ordenação
+    if (sortBy === 'nome') {
+        comandas.sort((a, b) => a.nome_cliente.localeCompare(b.nome_cliente));
+    } else {
+        // Já vem ordenado por data do banco, mas garantimos
+        comandas.sort((a, b) => b.data_hora - a.data_hora);
+    }
+
     const container = document.getElementById('comandas-list');
 
     if (comandas.length === 0) {
@@ -164,6 +182,11 @@ function switchTab(tab) {
     renderComandas();
 }
 
+function handleSortChange(e) {
+    sortBy = e.target.value;
+    renderComandas();
+}
+
 async function handleSearchComandas(e) {
     const searchTerm = e.target.value.trim();
 
@@ -172,8 +195,16 @@ async function handleSearchComandas(e) {
         return;
     }
 
-    const comandas = await db.searchComandasByCliente(searchTerm);
-    const comandasFiltradas = comandas.filter(c => c.status === (currentTab === 'abertas' ? 'aberta' : 'paga'));
+    let comandas = await db.searchComandasByCliente(searchTerm);
+    let comandasFiltradas = comandas.filter(c => c.status === (currentTab === 'abertas' ? 'aberta' : 'paga'));
+
+    // Aplica ordenação
+    if (sortBy === 'nome') {
+        comandasFiltradas.sort((a, b) => a.nome_cliente.localeCompare(b.nome_cliente));
+    } else {
+        comandasFiltradas.sort((a, b) => b.data_hora - a.data_hora);
+    }
+
     const container = document.getElementById('comandas-list');
 
     if (comandasFiltradas.length === 0) {
@@ -245,6 +276,50 @@ async function criarComanda() {
 function clearNovaComandaForm() {
     document.getElementById('input-cliente').value = '';
     document.getElementById('input-mesa').value = '';
+}
+
+// ===== MODAL: EDITAR COMANDA =====
+function openEditarComandaModal() {
+    if (!currentComanda) return;
+
+    showModal('modal-editar-comanda');
+    document.getElementById('edit-input-cliente').value = currentComanda.nome_cliente;
+    document.getElementById('edit-input-mesa').value = currentComanda.mesa || '';
+    document.getElementById('edit-input-cliente').focus();
+}
+
+async function salvarEdicaoComanda() {
+    if (!currentComanda) return;
+
+    const novoNome = document.getElementById('edit-input-cliente').value.trim();
+    const novaMesa = document.getElementById('edit-input-mesa').value.trim();
+
+    if (!novoNome) {
+        showToast('Digite o nome do cliente');
+        return;
+    }
+
+    showLoading();
+
+    try {
+        currentComanda.nome_cliente = novoNome;
+        currentComanda.mesa = novaMesa || null;
+
+        await db.updateComanda(currentComanda);
+
+        // Atualiza a interface
+        document.getElementById('venda-cliente-nome').textContent = currentComanda.nome_cliente;
+        document.getElementById('venda-mesa-info').textContent = currentComanda.mesa ? `Mesa ${currentComanda.mesa}` : '';
+
+        hideModal('modal-editar-comanda');
+        vibrate(50);
+        showToast('Comanda atualizada!');
+    } catch (error) {
+        console.error('Erro ao atualizar comanda:', error);
+        showToast('Erro ao atualizar comanda');
+    } finally {
+        hideLoading();
+    }
 }
 
 // ===== TELA: VENDA =====
@@ -320,7 +395,9 @@ function renderResumo() {
                 </div>
             </div>
             <div class="resumo-item-acoes">
-                <button class="btn-quantidade" onclick="removeProdutoFromComanda(${item.produto_id})">−</button>
+                <button class="btn-quantidade btn-menos" onclick="removeProdutoFromComanda(${item.produto_id})">−</button>
+                <span class="item-quantidade">${item.quantidade}</span>
+                <button class="btn-quantidade btn-mais" onclick="addProdutoToComanda(${item.produto_id})">+</button>
             </div>
         </div>
     `).join('');
